@@ -14,7 +14,7 @@ router.post('/', validateUser, async (req, res) => {
   }
 });
 
-router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
+router.post('/users/:id/posts', validateUserId, validatePost, async (req, res) => {
   const newPost = { ...req.body, user_id: req.params.id }
   try {
     const success = await postDb.insert(newPost)
@@ -80,15 +80,6 @@ router.put('/:id', validateUserId, validateUser, async (req, res) => {
 });
 
 //custom middleware
-
-async function validatePostId(req, res, next) {
-  const post = await db.getById(req.params.id)
-  if (post) {
-    next()
-  } else {
-    res.status(400).json({ message: "not found" })
-  }
-}
 
 async function validateUserId(req, res, next) {
   const user = await db.getById(req.params.id)
